@@ -79,11 +79,9 @@ public class Habito {
     public void eliminar(){
 
     }
-    /*
     @Override
     public String toString() {
         return "ID: " + idHabito + "\nNombre: " + nombre
                 + "\nDescripción: " + descripcion + "\nEstado: " + estado;
     }
-     */
 }
