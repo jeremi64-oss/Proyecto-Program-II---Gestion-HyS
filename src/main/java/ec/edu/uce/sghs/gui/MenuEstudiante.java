@@ -1,4 +1,4 @@
-package ec.edu.uce.sistemahabitosysueno.gui;
+package ec.edu.uce.sghs.gui;
 
 import java.util.Scanner;
 

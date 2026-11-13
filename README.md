@@ -7,24 +7,24 @@ Proyecto de Programación II de la Universidad Central del Ecuador, desarrollado
 - Clases de dominio para usuarios, roles, hábitos, metas, registros de sueño y reportes.
 - Menús de consola para estudiantes y administradores.
 - Validación de correo y contraseña.
-- Programas de prueba de acceso, roles y navegación.
+- Diez clases de pruebas con JUnit Jupiter 5.10.2.
 
-El inicio de sesión y el registro son simulados en esta versión.
+Los paquetes de esta versión están bajo `ec.edu.uce.sghs`. El inicio de sesión y el registro son simulados.
 
-## Abrir y ejecutar en IntelliJ IDEA
+## Abrir en IntelliJ IDEA
 
 1. Clonar o descargar este repositorio.
 2. Abrir el archivo `pom.xml` como proyecto Maven.
 3. Configurar el SDK del proyecto y de Maven con JDK 27, según la versión declarada en `pom.xml`.
-4. Ejecutar `ec.edu.uce.sistemahabitosysueno.test.MenuTest`, en `src/test/java`, para iniciar el menú del sistema.
-5. Ejecutar `ec.edu.uce.sistemahabitosysueno.test.SistemaTest` para comprobar la asignación de roles y la detección de intentos fallidos.
+4. Recargar el proyecto Maven para resolver la dependencia de JUnit.
+5. Para ejecutar las pruebas, seleccionar `src/test/java` y usar la opción de ejecutar todas las pruebas en IntelliJ.
 
-La clase `Main` conserva el ejemplo inicial de IntelliJ; el menú del sistema se inicia desde `MenuTest`.
+Esta versión no incluye un método `main`. El menú principal se encuentra en `ec.edu.uce.sghs.gui.MenuPrincipal` y expone el método estático `mostrarMenu()`.
 
 ## Archivos del proyecto
 
-- `src/main/java`: código fuente.
-- `src/test/java`: programas de prueba ejecutables.
-- `pom.xml`: configuración Maven.
+- `src/main/java/ec/edu/uce/sghs`: código fuente.
+- `src/test/java/ec/edu/uce/sghs/test`: pruebas JUnit.
+- `pom.xml`: configuración Maven y dependencia de pruebas.
 
 Los archivos compilados (`target/`) y la configuración local del editor (`.idea/`) se excluyen del repositorio.
