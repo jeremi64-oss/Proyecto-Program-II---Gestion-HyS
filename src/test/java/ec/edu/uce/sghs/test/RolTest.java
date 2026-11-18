@@ -1,125 +1,71 @@
 package ec.edu.uce.sghs.test;
 
 import ec.edu.uce.sghs.dominio.Rol;
-import ec.edu.uce.sghs.dominio.Usuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RolTest {
 
     private Rol rol;
-    private Usuario usuario;
 
     @BeforeEach
-    void preparar() {
-        rol = new Rol(1, "estudiante");
-        usuario = new Usuario();
+    public void setUp() {
+        rol = new Rol(1L, Rol.TipoRol.ESTUDIANTE, "Rol asignado a estudiantes del sistema");
     }
 
     @Test
-    void crearConConstructorCompleto() {
+    void rolDatosValidos() {
+        Rol r = new Rol(2L, Rol.TipoRol.ADMINISTRADOR, "Rol con privilegios de administracion");
+
+        assertEquals(2L, r.getIdRol());
+        assertEquals(Rol.TipoRol.ADMINISTRADOR, r.getTipo());
+        assertEquals("Rol con privilegios de administracion", r.getDescripcion());
+    }
+
+    @Test
+    void rolDefecto() {
+        Rol r = new Rol();
+
+        assertNull(r.getIdRol());
+        assertNull(r.getTipo());
+        assertNull(r.getDescripcion());
+    }
+
+    @Test
+    public void testCrearRol() {
         assertNotNull(rol);
-        assertNotNull(rol.getNombre());
-        assertEquals(1, rol.getIdRol());
-        assertEquals("estudiante", rol.getNombre());
-        assertTrue(rol.esEstudiante());
-        assertFalse(rol.esAdministrador());
     }
 
     @Test
-    void completarConstructorVacioConSetters() {
-        Rol nuevo = new Rol();
-
-        nuevo.setIdRol(2);
-        nuevo.setNombre("administrador");
-
-        assertEquals(2, nuevo.getIdRol());
-        assertEquals("administrador", nuevo.getNombre());
-        assertTrue(nuevo.esAdministrador());
-        assertFalse(nuevo.esEstudiante());
+    public void testGetYSetIdRol() {
+        rol.setIdRol(10L);
+        assertEquals(10L, rol.getIdRol());
     }
 
     @Test
-    void normalizarNombre() {
-        rol.setNombre(" ADMINISTRADOR ");
-
-        assertEquals("administrador", rol.getNombre());
+    public void testGetYSetTipo() {
+        rol.setTipo(Rol.TipoRol.ADMINISTRADOR);
+        assertEquals(Rol.TipoRol.ADMINISTRADOR, rol.getTipo());
     }
 
     @Test
-    void rechazarNombreNuloOVacio() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> rol.setNombre(null)
-        );
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> rol.setNombre("")
-        );
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> rol.setNombre("   ")
-        );
-
-        assertEquals("estudiante", rol.getNombre());
+    public void testGetYSetDescripcion() {
+        rol.setDescripcion("Nueva descripcion del rol");
+        assertEquals("Nueva descripcion del rol", rol.getDescripcion());
     }
 
     @Test
-    void rechazarOpcionNoPermitida() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new Rol(1, "profesor")
-        );
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> rol.setNombre("admin")
-        );
+    public void obtenerPermisosTest() {
+        List<String> permisos = rol.obtenerPermisos();
+        assertNull(permisos);
     }
 
     @Test
-    void rechazarIdentificadorInvalido() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new Rol(0, "estudiante")
-        );
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> rol.setIdRol(-1)
-        );
-
-        assertEquals(1, rol.getIdRol());
-    }
-
-    @Test
-    void asignarRolAUsuario() {
-        rol.asignar(usuario);
-
-        assertNotNull(usuario.getRol());
-        assertEquals(rol, usuario.getRol());
-        assertEquals("estudiante", usuario.getRol().getNombre());
-    }
-
-    @Test
-    void rechazarAsignacionSinUsuario() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> rol.asignar(null)
-        );
-    }
-
-    @Test
-    void rechazarAsignacionDeRolIncompleto() {
-        Rol incompleto = new Rol();
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> incompleto.asignar(usuario)
-        );
+    public void testToString() {
+        assertNotNull(rol.toString());
     }
 }

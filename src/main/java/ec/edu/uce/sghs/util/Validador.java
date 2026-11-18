@@ -5,39 +5,46 @@ import java.util.regex.Pattern;
 
 public class Validador {
 
-    // Valida correo electrónico
-    public static boolean validarCorreo(String correo) {
-        // Expresión regular básica para correos (texto@dominio.extensión)
-        String regexCorreo = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
-        Pattern pattern = Pattern.compile(regexCorreo);
-        Matcher matcher = pattern.matcher(correo);
-        return matcher.matches();
-    }
+    private static final String CORREO_REGEX = "^[\\w._%+-]+@uce\\.edu\\.ec$";
 
-    // Valida contraseña (mínimo 8 caracteres)
-    public static boolean validarContrasena(String contrasena) {
-        if (contrasena == null) {
+    private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
+
+    private static final String TEXTO_DESCRIPCION_REGEX = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$";
+
+    public static boolean validarCorreo(String correo) {
+        if (correo == null || correo.isBlank()) {
             return false;
         }
-        // Valida que tenga al menos 8 caracteres
-        String regexPass = "^.{8,}$";
-        Pattern pattern = Pattern.compile(regexPass);
-        Matcher matcher = pattern.matcher(contrasena);
+        Pattern pattern = Pattern.compile(CORREO_REGEX, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(correo.strip());
         return matcher.matches();
     }
 
-    // Valida horas de sueño (número entero entre 4 y 12)
-    // Primero que sea estrictamente un número entero
-
-    public static boolean validarHorasSueno(String entradaHoras) {
-        String regexNumero = "^\\d+$";
-        Pattern pattern = Pattern.compile(regexNumero);
-        Matcher matcher = pattern.matcher(entradaHoras);
-
-        if (matcher.matches()) {
-            int horas = Integer.parseInt(entradaHoras);
-            return horas >= 4 && horas <= 12;
+    public static boolean validarPassword(String password) {
+        if (password == null || password.isBlank()) {
+            return false;
         }
-        return false;
+        Pattern pattern = Pattern.compile(PASSWORD_REGEX);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    public static boolean validarTextoGeneral(String texto) {
+        if (texto == null || texto.isBlank()) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile(TEXTO_DESCRIPCION_REGEX);
+        Matcher matcher = pattern.matcher(texto.strip());
+        return matcher.matches();
+    }
+
+    public static boolean validarEntero(String texto) {
+        if (texto == null || texto.isBlank()) {
+            return false;
+        }
+
+        Pattern pattern = Pattern.compile("^-?\\d+$");
+        Matcher matcher = pattern.matcher(texto.strip());
+        return matcher.matches();
     }
 }

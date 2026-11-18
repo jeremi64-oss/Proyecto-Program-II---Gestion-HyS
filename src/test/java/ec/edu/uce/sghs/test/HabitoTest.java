@@ -4,137 +4,117 @@ import ec.edu.uce.sghs.dominio.Habito;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HabitoTest {
 
     private Habito habito;
-    private int idHabito;
-    private String nombre;
-    private String descripcion;
-    private String estado;
 
     @BeforeEach
-    public void setUp(){ habito = new Habito( 2, "Dormir",
-            "Cuerpo y mente entran a un estado de reposo, diriamente", "Activo");
+    public void setUp() {
+        habito = new Habito(1L, "Dormir 8 horas", Habito.PolaridadHabito.POSITIVO, 5, 20, true);
     }
 
     @Test
-    void habitoValido(){
-        Habito hab = new Habito( 1, "Dibujar", "Forma de distraerme", "Activo");
-        assertEquals( 1, hab.getIdHabito());
-        assertEquals("Dibujar", hab.getNombre());
-        assertEquals("Forma de distraerme", hab.getDescripcion());
-        assertEquals( "Activo", hab.getEstado());
+    void habitoDatosValidos() {
+        Habito h = new Habito(2L, "Evitar pantallas", Habito.PolaridadHabito.NEGATIVO, 2, 10, false);
+
+        assertEquals(2L, h.getIdHabito());
+        assertEquals("Evitar pantallas", h.getNombre());
+        assertEquals(Habito.PolaridadHabito.NEGATIVO, h.getPolaridad());
+        assertEquals(2, h.getRachaActual());
+        assertEquals(10, h.getDiasCumplidos());
+        assertFalse(h.isActivo());
     }
 
     @Test
-    void HabitoNoNulo(){
-        Habito hab1 = new Habito();
-        assertNotNull(hab1.getIdHabito());
-        assertNotNull(hab1.getNombre());
-        assertNotNull(hab1.getDescripcion());
-        assertNotNull(hab1.getEstado());
+    void habitoDefecto() {
+        Habito h = new Habito();
+
+        assertNull(h.getIdHabito());
+        assertNull(h.getNombre());
+        assertNull(h.getPolaridad());
+        assertEquals(0, h.getRachaActual());
+        assertEquals(0, h.getDiasCumplidos());
+        assertFalse(h.isActivo());
     }
 
     @Test
-    void habitoPorDefecto(){
-        Habito hab = new Habito();
-        assertEquals(0, hab.getIdHabito());
-        assertEquals("Sin nombre", hab.getNombre());
-        assertEquals("Sin descripcion", hab.getDescripcion());
-        assertEquals("nulo", hab.getEstado());
-    }
-
-    @Test
-    void CrearHabito(){
+    public void testCrearHabito() {
         assertNotNull(habito);
     }
 
     @Test
-    void getIdHabito(){
-        assertEquals( 2, habito.getIdHabito());
+    public void testGetYSetIdHabito() {
+        habito.setIdHabito(15L);
+        assertEquals(15L, habito.getIdHabito());
     }
 
     @Test
-    void getNombre(){
-        assertEquals("Dormir", habito.getNombre());
+    public void testGetYSetNombre() {
+        habito.setNombre("Meditar 10 minutos");
+        assertEquals("Meditar 10 minutos", habito.getNombre());
     }
 
     @Test
-    void getDescripcion(){
-        assertEquals("Cuerpo y mente entran a un estado de reposo, diriamente", habito.getDescripcion());
+    public void testGetYSetPolaridad() {
+        habito.setPolaridad(Habito.PolaridadHabito.NEGATIVO);
+        assertEquals(Habito.PolaridadHabito.NEGATIVO, habito.getPolaridad());
     }
 
     @Test
-    void getEstado(){
-        assertEquals( "Activo", habito.getEstado());
+    public void testGetYSetRachaActual() {
+        habito.setRachaActual(7);
+        assertEquals(7, habito.getRachaActual());
     }
 
     @Test
-    void setIdHabitoValido(){
-        assertTrue(habito.setIdHabito(5));
-        assertEquals(5, habito.getIdHabito());
-    }
-    @Test
-    void setIdHabitoInvalido(){
-        int idHabitoAntes = habito.getIdHabito();
-        assertFalse(habito.setIdHabito(0));
-        assertFalse(habito.setIdHabito(-2));
-        assertEquals(idHabitoAntes, habito.getIdHabito());
+    public void testGetYSetDiasCumplidos() {
+        habito.setDiasCumplidos(25);
+        assertEquals(25, habito.getDiasCumplidos());
     }
 
     @Test
-    void setNombreValido(){
-        assertTrue(habito.setNombre("Videojuegos"));
-        assertEquals("Videojuegos", habito.getNombre());
-    }
-    @Test
-    void setNombreInvalido(){
-        String nombreAntes = habito.getNombre();
-        assertFalse(habito.setNombre(null));
-        assertFalse(habito.setNombre(" "));
-        assertFalse(habito.setNombre( "Videojuego1"));
-        assertFalse(habito.setNombre("1Videojuego"));
-        assertFalse(habito.setNombre("123"));
-        assertEquals(nombreAntes, habito.getNombre());
+    public void testGetYSetActivo() {
+        habito.setActivo(false);
+        assertFalse(habito.isActivo());
+
+        habito.setActivo(true);
+        assertTrue(habito.isActivo());
     }
 
     @Test
-    void setDescripcionValido(){
-        assertTrue(habito.setDescripcion("Horas para relajarme"));
-        assertEquals( "Horas para relajarme", habito.getDescripcion());
-
-    }
-    @Test
-    void setDescripcionInvalido(){
-        String descAntes = habito.getDescripcion();
-        assertFalse(habito.setDescripcion(null));
-        assertFalse(habito.setDescripcion(""));
-        assertFalse(habito.setDescripcion("   "));
-        assertEquals(descAntes, habito.getDescripcion());
+    public void registrarCumplimientoTest() {
+        LocalDate fecha = LocalDate.of(2026, 11, 17);
+        assertTrue(habito.registrarCumplimiento(fecha, true));
+        assertFalse(habito.registrarCumplimiento(fecha, false));
     }
 
     @Test
-    void setEstadoValido() {
-        assertTrue(habito.setEstado("Activo"));
-        assertEquals("Activo", habito.getEstado());
-        assertTrue(habito.setEstado("Inactivo"));
-        assertEquals("Inactivo", habito.getEstado());
-    }
-    @Test
-    void setEstadoInvalido() {
-        String estadoAntes = habito.getEstado();
-        assertFalse(habito.setEstado(null));
-        assertFalse(habito.setEstado(""));
-        assertFalse(habito.setEstado("   "));
-        assertEquals(estadoAntes, habito.getEstado());
+    public void calcularGananciaValida() {
+        // diasCumplidos = 20 (del setUp)
+        // Si diasTotales = 40, ganancia debe ser 50.0%
+        double ganancia = habito.calcularGanancia(40);
+        assertEquals(50.0, ganancia);
     }
 
     @Test
-    void mostrarDatos() {
-        String esperado = "ID: 2\nNombre: Dormir\nDescripción: Cuerpo y mente entran a un estado de reposo, diriamente\nEstado: Activo";
-        assertEquals(esperado, habito.toString());
+    public void calcularGananciaDiasTotalesInvalidos() {
+        assertEquals(0.0, habito.calcularGanancia(0));
+        assertEquals(0.0, habito.calcularGanancia(-5));
+    }
+
+    @Test
+    public void editarHabitoTest() {
+        habito.editarHabito("Leer antes de dormir", Habito.PolaridadHabito.POSITIVO);
+        assertEquals("Leer antes de dormir", habito.getNombre());
+        assertEquals(Habito.PolaridadHabito.POSITIVO, habito.getPolaridad());
+    }
+
+    @Test
+    public void testToString() {
+        assertNotNull(habito.toString());
     }
 }
-

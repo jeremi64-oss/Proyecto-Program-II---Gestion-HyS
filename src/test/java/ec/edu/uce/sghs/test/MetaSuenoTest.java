@@ -4,31 +4,82 @@ import ec.edu.uce.sghs.dominio.MetaSueno;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaSuenoTest {
 
     private MetaSueno metaSueno;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
+    private LocalTime horaDormir;
+    private LocalTime horaDespertar;
 
     @BeforeEach
     public void setUp() {
-        metaSueno = new MetaSueno(1, 8.0);
+        fechaInicio = LocalDate.of(2026, 11, 1);
+        fechaFin = LocalDate.of(2026, 11, 30);
+        horaDormir = LocalTime.of(22, 0);
+        horaDespertar = LocalTime.of(6, 0);
+
+        metaSueno = new MetaSueno(
+                1L,
+                "Dormir temprano y cumplir 8 horas",
+                8.0,
+                "horas",
+                fechaInicio,
+                fechaFin,
+                horaDormir,
+                horaDespertar,
+                8.0
+        );
     }
 
     @Test
     void metaSuenoDatosValidos() {
-        MetaSueno meta = new MetaSueno(2, 7.5);
+        LocalDate inicio = LocalDate.of(2026, 12, 1);
+        LocalDate fin = LocalDate.of(2026, 12, 31);
+        LocalTime dormir = LocalTime.of(23, 0);
+        LocalTime despertar = LocalTime.of(7, 0);
 
-        assertEquals(2, meta.getIdMeta());
-        assertEquals(7.5, meta.getHorasObjetivo());
+        MetaSueno m = new MetaSueno(
+                2L,
+                "Rutina nocturna",
+                7.5,
+                "horas",
+                inicio,
+                fin,
+                dormir,
+                despertar,
+                7.5
+        );
+
+        assertEquals(2L, m.getIdMeta());
+        assertEquals("Rutina nocturna", m.getDescripcionEspecifica());
+        assertEquals(7.5, m.getValorMedible());
+        assertEquals("horas", m.getUnidadMedida());
+        assertEquals(inicio, m.getFechaInicio());
+        assertEquals(fin, m.getFechaFin());
+        assertEquals(dormir, m.getHoraDormirObjetivo());
+        assertEquals(despertar, m.getHoraDespertarObjetivo());
+        assertEquals(7.5, m.getHorasSuenoOptimas());
     }
 
     @Test
     void metaSuenoDefecto() {
-        MetaSueno meta = new MetaSueno();
+        MetaSueno m = new MetaSueno();
 
-        assertEquals(1, meta.getIdMeta());
-        assertEquals(8.0, meta.getHorasObjetivo());
+        assertNull(m.getIdMeta());
+        assertNull(m.getDescripcionEspecifica());
+        assertEquals(0.0, m.getValorMedible());
+        assertNull(m.getUnidadMedida());
+        assertNull(m.getFechaInicio());
+        assertNull(m.getFechaFin());
+        assertNull(m.getHoraDormirObjetivo());
+        assertNull(m.getHoraDespertarObjetivo());
+        assertEquals(0.0, m.getHorasSuenoOptimas());
     }
 
     @Test
@@ -37,43 +88,57 @@ public class MetaSuenoTest {
     }
 
     @Test
-    public void testGetIdMeta() {
-        assertEquals(1, metaSueno.getIdMeta());
+    public void testGetYSetHoraDormirObjetivo() {
+        LocalTime nuevaHora = LocalTime.of(23, 30);
+        metaSueno.setHoraDormirObjetivo(nuevaHora);
+        assertEquals(nuevaHora, metaSueno.getHoraDormirObjetivo());
     }
 
     @Test
-    public void testGetHorasObjetivo() {
-        assertEquals(8.0, metaSueno.getHorasObjetivo());
+    public void testGetYSetHoraDespertarObjetivo() {
+        LocalTime nuevaHora = LocalTime.of(6, 30);
+        metaSueno.setHoraDespertarObjetivo(nuevaHora);
+        assertEquals(nuevaHora, metaSueno.getHoraDespertarObjetivo());
     }
 
     @Test
-    public void testSetIdMetaValido() {
-        assertTrue(metaSueno.setIdMeta(5));
-        assertEquals(5, metaSueno.getIdMeta());
+    public void testGetYSetHorasSuenoOptimas() {
+        metaSueno.setHorasSuenoOptimas(9.0);
+        assertEquals(9.0, metaSueno.getHorasSuenoOptimas());
     }
 
     @Test
-    public void idMetaInvalido() {
-        int idAntes = metaSueno.getIdMeta();
-        assertFalse(metaSueno.setIdMeta(-1));
-        assertEquals(idAntes, metaSueno.getIdMeta());
+    public void evaluarCumplimientoTest() {
+        // horasSuenoOptimas configurado en setUp es 8.0
+        assertTrue(metaSueno.evaluarCumplimiento(8.0));  // Igual
+        assertTrue(metaSueno.evaluarCumplimiento(9.0));  // Mayor
+        assertFalse(metaSueno.evaluarCumplimiento(7.0)); // Menor
     }
 
     @Test
-    public void testSetHorasObjetivoValido() {
-        assertTrue(metaSueno.setHorasObjetivo(4.0));
-        assertEquals(4.0, metaSueno.getHorasObjetivo());
-        assertTrue(metaSueno.setHorasObjetivo(12.0));
-        assertEquals(12.0, metaSueno.getHorasObjetivo());
+    public void calcularDesviacionMinutosPositiva() {
+        // horaDormirObjetivo es 22:00. Si se duerme a las 22:30 (30 mins tarde)
+        LocalTime horaReal = LocalTime.of(22, 30);
+        assertEquals(30, metaSueno.calcularDesviacionMinutos(horaReal));
     }
 
     @Test
-    public void horasObjetivoInvalidas() {
-        double horasAntes = metaSueno.getHorasObjetivo();
+    public void calcularDesviacionMinutosNegativa() {
+        // horaDormirObjetivo es 22:00. Si se duerme a las 21:45 (15 mins temprano)
+        LocalTime horaReal = LocalTime.of(21, 45);
+        assertEquals(-15, metaSueno.calcularDesviacionMinutos(horaReal));
+    }
 
-        assertFalse(metaSueno.setHorasObjetivo(3.9));
-        assertFalse(metaSueno.setHorasObjetivo(12.1));
-        assertFalse(metaSueno.setHorasObjetivo(-5.0));
-        assertEquals(horasAntes, metaSueno.getHorasObjetivo());
+    @Test
+    public void calcularDesviacionMinutosNula() {
+        assertEquals(0, metaSueno.calcularDesviacionMinutos(null));
+
+        MetaSueno metaSinHora = new MetaSueno();
+        assertEquals(0, metaSinHora.calcularDesviacionMinutos(LocalTime.of(22, 0)));
+    }
+
+    @Test
+    public void testToString() {
+        assertNotNull(metaSueno.toString());
     }
 }

@@ -1,87 +1,98 @@
 package ec.edu.uce.sghs.dominio;
+import java.time.LocalDate;
 
 public class Habito {
 
-    private int idHabito;
+    private Long idHabito;
     private String nombre;
-    private String descripcion;
-    private String estado;
+    private PolaridadHabito polaridad;
+    private int rachaActual;
+    private int diasCumplidos;
+    private boolean activo;
 
     public Habito(){
-        idHabito = 0;
-        nombre = "Sin nombre";
-        descripcion = "Sin descripcion";
-        estado = "nulo";
     }
 
-    public Habito (int idHabito, String nombre, String descripcion, String estado){
+    public Habito(Long idHabito, String nombre, PolaridadHabito polaridad, int rachaActual, int diasCumplidos, boolean activo){
+
         this.idHabito = idHabito;
         this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.estado = estado;
+        this.polaridad= polaridad;
+        this.rachaActual = rachaActual;
+        this.diasCumplidos = diasCumplidos;
+        this.activo = activo;
     }
 
-
-    public int getIdHabito(){
+    public Long getIdHabito() {
         return idHabito;
     }
-    public boolean setIdHabito(int idHabito){
-        if (idHabito> 0){
-            this.idHabito = idHabito;
-            return true;
-        }else{
-            return false;
-        }
+    public void setIdHabito(Long idHabito) {
+        this.idHabito = idHabito;
     }
 
-    public String getNombre(){
+
+    public String getNombre() {
         return nombre;
     }
-    public boolean setNombre(String nombre){
-        if (nombre != null && nombre != " " && !nombre.matches(".*\\d.*")){
-            this.nombre = nombre;
-            return true;
-        }else{
-            return false;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+
+    public PolaridadHabito getPolaridad() {
+        return polaridad;
+    }
+    public void setPolaridad(PolaridadHabito polaridad) {
+        this.polaridad = polaridad;
+    }
+
+
+    public int getRachaActual() {
+        return rachaActual;
+    }
+    public void setRachaActual(int rachaActual) {
+        this.rachaActual = rachaActual;
+    }
+
+
+    public int getDiasCumplidos() {
+        return diasCumplidos;
+    }
+    public void setDiasCumplidos(int diasCumplidos) {
+        this.diasCumplidos = diasCumplidos;
+    }
+
+
+    public boolean isActivo() {
+        return activo;
+    }
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+
+// --- Métodos
+
+
+    public boolean registrarCumplimiento(LocalDate fecha, boolean cumplido) {
+        return cumplido;
+    }
+
+    public double calcularGanancia(int diasTotales) {
+        if (diasTotales <= 0) {
+            return 0.0;
         }
+        return (double) this.diasCumplidos / diasTotales * 100.0;
     }
 
-    public String getDescripcion(){
-        return descripcion;
-    }
-    public boolean setDescripcion(String descripcion){
-        if (descripcion == null || descripcion == "" || descripcion == "   ") {
-            return false;
-        }
-        this.descripcion = descripcion;
-        return true;
+    public void editarHabito(String nombre, PolaridadHabito polaridad) {
+        this.nombre = nombre;
+        this.polaridad = polaridad;
     }
 
-
-    public String getEstado(){
-        return estado;
-    }
-    public boolean setEstado(String estado){
-        if (estado == null || estado == "" || estado == "   ") {
-            return false;
-        }else {
-            this.estado = estado;
-            return true;
-        }
-    }
-    //Metodos de la clase
-    public void crear(){
-
-    }
-    public void editar(){
-
-    }
-    public void eliminar(){
-
-    }
-    @Override
-    public String toString() {
-        return "ID: " + idHabito + "\nNombre: " + nombre
-                + "\nDescripción: " + descripcion + "\nEstado: " + estado;
+    public enum PolaridadHabito {
+        POSITIVO,
+        NEGATIVO
     }
 }
+

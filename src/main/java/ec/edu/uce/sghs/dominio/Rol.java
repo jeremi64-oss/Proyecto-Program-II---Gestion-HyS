@@ -1,78 +1,52 @@
 package ec.edu.uce.sghs.dominio;
 
-import java.util.Locale;
+import java.util.List;
 
 public class Rol {
 
-    private int idRol;
-    private String nombre;
+    private Long idRol;
+    private TipoRol tipo;
+    private String descripcion;
 
-    public Rol() {
+    public Rol (){
     }
 
-    public Rol(int idRol, String nombre) {
-        setIdRol(idRol);
-        setNombre(nombre);
+    public Rol (Long idRol, TipoRol tipo, String descripcion){
+        this.idRol = idRol;
+        this.tipo = tipo;
+        this.descripcion = descripcion;
     }
 
-    public void asignar(Usuario usuario) {
-        if (usuario == null) {
-            throw new IllegalArgumentException(
-                    "Debe seleccionar un usuario."
-            );
-        }
 
-        if (idRol <= 0 || nombre == null) {
-            throw new IllegalArgumentException(
-                    "Debe completar los datos del rol."
-            );
-        }
-
-        usuario.setRol(this);
-    }
-
-    public boolean esEstudiante() {
-        return "estudiante".equals(nombre);
-    }
-
-    public boolean esAdministrador() {
-        return "administrador".equals(nombre);
-    }
-
-    public int getIdRol() {
+    public Long getIdRol() {
         return idRol;
     }
-
-    public void setIdRol(int idRol) {
-        if (idRol <= 0) {
-            throw new IllegalArgumentException(
-                    "El identificador del rol debe ser positivo."
-            );
-        }
-
+    public void setIdRol(Long idRol) {
         this.idRol = idRol;
     }
 
-    public String getNombre() {
-        return nombre;
+    public TipoRol getTipo() {
+        return tipo;
+    }
+    public void setTipo(TipoRol tipo) {
+        this.tipo = tipo;
     }
 
-    public void setNombre(String nombre) {
-        if (nombre == null || nombre.isBlank()) {
-            throw new IllegalArgumentException(
-                    "El nombre del rol es obligatorio."
-            );
-        }
+    public String getDescripcion() {
+        return descripcion;
+    }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-        String nuevoNombre = nombre.trim().toLowerCase(Locale.ROOT);
+    // --Metodos del Diagrama--
+    public List<String> obtenerPermisos(){
+        return null;
+    }
 
-        if (!nuevoNombre.equals("estudiante")
-                && !nuevoNombre.equals("administrador")) {
-            throw new IllegalArgumentException(
-                    "El rol debe ser estudiante o administrador."
-            );
-        }
-
-        this.nombre = nuevoNombre;
+    public enum TipoRol {
+        ESTUDIANTE,
+        ADMINISTRADOR
     }
 }
+

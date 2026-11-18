@@ -4,263 +4,94 @@ import ec.edu.uce.sghs.dominio.MetaHabito;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaHabitoTest {
 
-    private MetaHabito meta;
-    private List<MetaHabito> metas;
+    private MetaHabito metaHabito;
 
     @BeforeEach
-    void preparar() {
-        meta = new MetaHabito(1, 10, 3, 5);
-        metas = new ArrayList<>();
+    public void setUp() {
+        metaHabito = new MetaHabito(4, 7);
     }
 
     @Test
-    void crearConConstructorCompleto() {
-        assertNotNull(meta);
-        assertEquals(1, meta.getIdMeta());
-        assertEquals(10, meta.getIdHabito());
-        assertEquals(3, meta.getVecesPorSemana());
-        assertEquals(5, meta.getDiasProgramados());
-        assertEquals(0, meta.getDiasCumplidos());
-        assertFalse(meta.isCumplida());
-        assertEquals("no cumplida", meta.getEstado());
+    void metaHabitoDatosValidos() {
+        MetaHabito m = new MetaHabito(5, 10);
+
+        assertEquals(5, m.getFrecuenciaSemanal());
+        assertEquals(10, m.getRachaMinimaObjetivo());
     }
 
     @Test
-    void completarConstructorVacioConSetters() {
-        MetaHabito nueva = new MetaHabito();
+    void metaHabitoDefecto() {
+        MetaHabito m = new MetaHabito();
 
-        nueva.setIdMeta(2);
-        nueva.setIdHabito(20);
-        nueva.setDiasProgramados(4);
-        nueva.setVecesPorSemana(2);
-        nueva.setDiasCumplidos(1);
-
-        assertEquals(2, nueva.getIdMeta());
-        assertEquals(20, nueva.getIdHabito());
-        assertEquals(4, nueva.getDiasProgramados());
-        assertEquals(2, nueva.getVecesPorSemana());
-        assertEquals(1, nueva.getDiasCumplidos());
+        assertEquals(3, m.getFrecuenciaSemanal());
+        assertEquals(5, m.getRachaMinimaObjetivo());
     }
 
     @Test
-    void completarConstructorDeDosParametros() {
-        MetaHabito nueva = new MetaHabito(2, 3);
-
-        nueva.setIdHabito(20);
-        nueva.setDiasProgramados(5);
-        nueva.guardar(metas);
-
-        assertEquals(1, metas.size());
-        assertEquals(3, metas.get(0).getVecesPorSemana());
+    public void testCrearMetaHabito() {
+        assertNotNull(metaHabito);
     }
 
     @Test
-    void aceptarLimitesDeFrecuencia() {
-        MetaHabito minima = new MetaHabito(1, 10, 1, 1);
-        MetaHabito maxima = new MetaHabito(2, 20, 7, 7);
+    public void testSetFrecuenciaSemanalValida() {
+        assertTrue(metaHabito.setFrecuenciaSemanal(1));
+        assertEquals(1, metaHabito.getFrecuenciaSemanal());
 
-        assertEquals(1, minima.getVecesPorSemana());
-        assertEquals(7, maxima.getVecesPorSemana());
+        assertTrue(metaHabito.setFrecuenciaSemanal(7));
+        assertEquals(7, metaHabito.getFrecuenciaSemanal());
     }
 
     @Test
-    void rechazarIdentificadoresInvalidos() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.setIdMeta(0)
-        );
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.setIdHabito(-1)
-        );
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.setIdHabito(null)
-        );
+    public void frecuenciaSemanalInvalida() {
+        int frecuenciaAntes = metaHabito.getFrecuenciaSemanal();
+        assertFalse(metaHabito.setFrecuenciaSemanal(0));
+        assertFalse(metaHabito.setFrecuenciaSemanal(8));
+        assertFalse(metaHabito.setFrecuenciaSemanal(-2));
+        assertEquals(frecuenciaAntes, metaHabito.getFrecuenciaSemanal());
     }
 
     @Test
-    void rechazarFrecuenciaVaciaOFueraDelRango() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.setVecesPorSemana(null)
-        );
+    public void testSetRachaMinimaObjetivoValida() {
+        assertTrue(metaHabito.setRachaMinimaObjetivo(0));
+        assertEquals(0, metaHabito.getRachaMinimaObjetivo());
 
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.setVecesPorSemana(0)
-        );
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.setVecesPorSemana(8)
-        );
-
-        assertEquals(3, meta.getVecesPorSemana());
+        assertTrue(metaHabito.setRachaMinimaObjetivo(14));
+        assertEquals(14, metaHabito.getRachaMinimaObjetivo());
     }
 
     @Test
-    void rechazarFrecuenciaMayorQueDiasProgramados() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.setVecesPorSemana(6)
-        );
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new MetaHabito(1, 10, 4, 3)
-        );
+    public void rachaMinimaObjetivoInvalida() {
+        int rachaAntes = metaHabito.getRachaMinimaObjetivo();
+        assertFalse(metaHabito.setRachaMinimaObjetivo(-1));
+        assertEquals(rachaAntes, metaHabito.getRachaMinimaObjetivo());
     }
 
     @Test
-    void rechazarDiasProgramadosInvalidos() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.setDiasProgramados(null)
-        );
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.setDiasProgramados(0)
-        );
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.setDiasProgramados(8)
-        );
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.setDiasProgramados(2)
-        );
-
-        assertEquals(5, meta.getDiasProgramados());
+    public void evaluarCumplimientoTest() {
+        // frecuenciaSemanal configurada en setUp es 4
+        assertTrue(metaHabito.evaluarCumplimiento(4.0)); // Igual
+        assertTrue(metaHabito.evaluarCumplimiento(5.0)); // Mayor
+        assertFalse(metaHabito.evaluarCumplimiento(3.0)); // Menor
     }
 
     @Test
-    void calcularEstadoDeLaMeta() {
-        meta.actualizarCumplimiento(2);
-        assertFalse(meta.isCumplida());
-
-        meta.actualizarCumplimiento(3);
-        assertTrue(meta.isCumplida());
-        assertEquals("cumplida", meta.getEstado());
-
-        meta.setDiasCumplidos(5);
-        assertTrue(meta.isCumplida());
-
-        meta.setDiasCumplidos(1);
-        assertFalse(meta.isCumplida());
+    public void verificarRachaAlcanzadaTest() {
+        // rachaMinimaObjetivo configurado en setUp es 7
+        assertTrue(metaHabito.verificarRachaAlcanzada(7)); // Igual
+        assertTrue(metaHabito.verificarRachaAlcanzada(10)); // Mayor
+        assertFalse(metaHabito.verificarRachaAlcanzada(5)); // Menor
     }
 
     @Test
-    void rechazarDiasCumplidosInvalidos() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.setDiasCumplidos(-1)
-        );
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.actualizarCumplimiento(6)
-        );
-
-        assertEquals(0, meta.getDiasCumplidos());
-    }
-
-    @Test
-    void guardarMeta() {
-        meta.guardar(metas);
-
-        assertFalse(metas.isEmpty());
-        assertEquals(1, metas.size());
-        assertEquals(1, metas.get(0).getIdMeta());
-        assertEquals(10, metas.get(0).getIdHabito());
-    }
-
-    @Test
-    void guardarCopiaIndependiente() {
-        meta.guardar(metas);
-        meta.setVecesPorSemana(4);
-
-        assertEquals(3, metas.get(0).getVecesPorSemana());
-        assertEquals(4, meta.getVecesPorSemana());
-    }
-
-    @Test
-    void rechazarMetaSinHabitoSeleccionado() {
-        MetaHabito incompleta = new MetaHabito(2, 3);
-        incompleta.setDiasProgramados(5);
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> incompleta.guardar(metas)
-        );
-
-        assertTrue(metas.isEmpty());
-    }
-
-    @Test
-    void rechazarMetaIncompleta() {
-        MetaHabito incompleta = new MetaHabito();
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> incompleta.guardar(metas)
-        );
-
-        assertTrue(metas.isEmpty());
-    }
-
-    @Test
-    void rechazarIdentificadorRepetido() {
-        meta.guardar(metas);
-        MetaHabito repetida = new MetaHabito(1, 20, 2, 4);
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> repetida.guardar(metas)
-        );
-
-        assertEquals(1, metas.size());
-    }
-
-    @Test
-    void rechazarSegundaMetaParaElMismoHabito() {
-        meta.guardar(metas);
-        MetaHabito repetida = new MetaHabito(2, 10, 2, 5);
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> repetida.guardar(metas)
-        );
-
-        assertEquals(1, metas.size());
-    }
-
-    @Test
-    void rechazarListaNulaOConElementosNulos() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.guardar(null)
-        );
-
-        metas.add(null);
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> meta.guardar(metas)
-        );
-
-        assertEquals(1, metas.size());
+    public void testToString() {
+        String resultado = metaHabito.toString();
+        assertNotNull(resultado);
+        assertTrue(resultado.contains("MetaHabito"));
+        assertTrue(resultado.contains("frecuenciaSemanal=4"));
+        assertTrue(resultado.contains("rachaMinimaObjetivo=7"));
     }
 }

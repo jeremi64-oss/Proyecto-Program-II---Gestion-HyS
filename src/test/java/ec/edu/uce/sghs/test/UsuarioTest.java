@@ -1,7 +1,6 @@
 package ec.edu.uce.sghs.test;
 
 import ec.edu.uce.sghs.dominio.Usuario;
-import ec.edu.uce.sghs.dominio.Rol;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,37 +9,32 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UsuarioTest {
 
     private Usuario usuario;
-    private Rol rolEstudiante;
 
     @BeforeEach
     public void setUp() {
-        rolEstudiante = new Rol(1, "estudiante");
-        usuario = new Usuario(1, "jaidrovo@uce.edu.ec", "12345678", true, 0, rolEstudiante);
+        usuario = new Usuario(1L, "Juan Perez", "jperez@uce.edu.ec", "hashSecure456", true);
     }
 
     @Test
     void usuarioDatosValidos() {
-        Rol rolAdmin = new Rol(2, "administrador");
-        Usuario usu = new Usuario(2, "admin@uce.edu.ec", "adminpass", true, 0, rolAdmin);
+        Usuario u = new Usuario(2L, "Maria Gomez", "mgomez@uce.edu.ec", "pass1234", false);
 
-        assertEquals(2, usu.getIdUsuario());
-        assertEquals("admin@uce.edu.ec", usu.getCorreo());
-        assertEquals("adminpass", usu.getContrasena());
-        assertTrue(usu.getEstadoCuenta());
-        assertEquals(0, usu.getIntentosFallidos());
-        assertEquals(rolAdmin, usu.getRol());
+        assertEquals(2L, u.getIdUsuario());
+        assertEquals("Maria Gomez", u.getNombre());
+        assertEquals("mgomez@uce.edu.ec", u.getCorreo());
+        assertEquals("pass1234", u.getPasswordHash());
+        assertFalse(u.isActivo());
     }
 
     @Test
     void usuarioDefecto() {
-        Usuario usu = new Usuario();
+        Usuario u = new Usuario();
 
-        assertEquals(1, usu.getIdUsuario());
-        assertEquals("correogenerico@uce.edu.ec", usu.getCorreo());
-        assertEquals("sin contraseña", usu.getContrasena());
-        assertTrue(usu.getEstadoCuenta());
-        assertEquals(0, usu.getIntentosFallidos());
-        assertNull(usu.getRol());
+        assertEquals(1L, u.getIdUsuario());
+        assertEquals("Usuario Base", u.getNombre());
+        assertEquals("usuario@uce.edu.ec", u.getCorreo());
+        assertEquals("hashSeguro123", u.getPasswordHash());
+        assertTrue(u.isActivo());
     }
 
     @Test
@@ -49,53 +43,38 @@ public class UsuarioTest {
     }
 
     @Test
-    public void testGetIdUsuario() {
-        assertEquals(1, usuario.getIdUsuario());
-    }
-
-    @Test
-    public void testGetCorreo() {
-        assertEquals("jaidrovo@uce.edu.ec", usuario.getCorreo());
-    }
-
-    @Test
-    public void testGetContrasena() {
-        assertEquals("12345678", usuario.getContrasena());
-    }
-
-    @Test
-    public void testGetEstadoCuenta() {
-        assertTrue(usuario.getEstadoCuenta());
-    }
-
-    @Test
-    public void testGetIntentosFallidos() {
-        assertEquals(0, usuario.getIntentosFallidos());
-    }
-
-    @Test
-    public void testGetRol() {
-        assertEquals(rolEstudiante, usuario.getRol());
-    }
-
-    @Test
     public void testSetIdUsuarioValido() {
-        assertTrue(usuario.setIdUsuario(10));
-        assertEquals(10, usuario.getIdUsuario());
+        assertTrue(usuario.setIdUsuario(10L));
+        assertEquals(10L, usuario.getIdUsuario());
     }
 
     @Test
     public void idUsuarioInvalido() {
-        int idAntes = usuario.getIdUsuario();
-        assertFalse(usuario.setIdUsuario(0));
-        assertFalse(usuario.setIdUsuario(-3));
+        Long idAntes = usuario.getIdUsuario();
+        assertFalse(usuario.setIdUsuario(null));
+        assertFalse(usuario.setIdUsuario(0L));
+        assertFalse(usuario.setIdUsuario(-3L));
         assertEquals(idAntes, usuario.getIdUsuario());
     }
 
     @Test
+    public void testSetNombreValido() {
+        assertTrue(usuario.setNombre("Carlos Andrade"));
+        assertEquals("Carlos Andrade", usuario.getNombre());
+    }
+
+    @Test
+    public void nombreInvalido() {
+        String nombreAntes = usuario.getNombre();
+        assertFalse(usuario.setNombre(null));
+        assertFalse(usuario.setNombre("   "));
+        assertEquals(nombreAntes, usuario.getNombre());
+    }
+
+    @Test
     public void testSetCorreoValido() {
-        assertTrue(usuario.setCorreo("nuevocorreo@uce.edu.ec"));
-        assertEquals("nuevocorreo@uce.edu.ec", usuario.getCorreo());
+        assertTrue(usuario.setCorreo("candrade@uce.edu.ec"));
+        assertEquals("candrade@uce.edu.ec", usuario.getCorreo());
     }
 
     @Test
@@ -103,59 +82,62 @@ public class UsuarioTest {
         String correoAntes = usuario.getCorreo();
         assertFalse(usuario.setCorreo(null));
         assertFalse(usuario.setCorreo("   "));
-        assertFalse(usuario.setCorreo("correosinformato"));
         assertEquals(correoAntes, usuario.getCorreo());
     }
 
     @Test
-    public void testSetContrasenaValida() {
-        assertTrue(usuario.setContrasena("nuevopass123"));
-        assertEquals("nuevopass123", usuario.getContrasena());
+    public void testSetPasswordHashValido() {
+        assertTrue(usuario.setPasswordHash("newHash789"));
+        assertEquals("newHash789", usuario.getPasswordHash());
     }
 
     @Test
-    public void contrasenaInvalida() {
-        String passAntes = usuario.getContrasena();
-        assertFalse(usuario.setContrasena(null));
-        assertFalse(usuario.setContrasena("   "));
-        assertFalse(usuario.setContrasena("12345"));
-        assertEquals(passAntes, usuario.getContrasena());
+    public void passwordHashInvalido() {
+        String passAntes = usuario.getPasswordHash();
+        assertFalse(usuario.setPasswordHash(null));
+        assertFalse(usuario.setPasswordHash("   "));
+        assertEquals(passAntes, usuario.getPasswordHash());
     }
 
     @Test
-    public void testSetEstadoCuenta() {
-        usuario.setEstadoCuenta(false);
-        assertFalse(usuario.getEstadoCuenta());
+    public void testSetYGetActivo() {
+        usuario.setActivo(false);
+        assertFalse(usuario.isActivo());
 
-        usuario.setEstadoCuenta(true);
-        assertTrue(usuario.getEstadoCuenta());
+        usuario.setActivo(true);
+        assertTrue(usuario.isActivo());
     }
 
     @Test
-    public void testSetIntentosFallidosValido() {
-        assertTrue(usuario.setIntentosFallidos(2));
-        assertEquals(2, usuario.getIntentosFallidos());
+    public void autenticarExitoso() {
+        // Datos correctos y activo
+        assertTrue(usuario.autenticar("jperez@uce.edu.ec", "hashSecure456"));
     }
 
     @Test
-    public void intentosFallidosInvalidos() {
-        int intentosAntes = usuario.getIntentosFallidos();
-        assertFalse(usuario.setIntentosFallidos(-1));
-        assertFalse(usuario.setIntentosFallidos(4));
-        assertEquals(intentosAntes, usuario.getIntentosFallidos());
+    public void autenticarFallido() {
+        // Correo incorrecto
+        assertFalse(usuario.autenticar("incorrecto@uce.edu.ec", "hashSecure456"));
+        // Clave incorrecta
+        assertFalse(usuario.autenticar("jperez@uce.edu.ec", "claveIncorrecta"));
+        // Usuario inactivo
+        usuario.setActivo(false);
+        assertFalse(usuario.autenticar("jperez@uce.edu.ec", "hashSecure456"));
     }
 
     @Test
-    public void testSetRolValido() {
-        Rol nuevoRol = new Rol(2, "administrador");
-        assertTrue(usuario.setRol(nuevoRol));
-        assertEquals(nuevoRol, usuario.getRol());
+    public void actualizarPerfilTest() {
+        usuario.actualizarPerfil("Ana Lopez", "alopez@uce.edu.ec");
+        assertEquals("Ana Lopez", usuario.getNombre());
+        assertEquals("alopez@uce.edu.ec", usuario.getCorreo());
     }
 
     @Test
-    public void rolInvalido() {
-        Rol rolAntes = usuario.getRol();
-        assertFalse(usuario.setRol(null));
-        assertEquals(rolAntes, usuario.getRol());
+    public void testToString() {
+        String resultado = usuario.toString();
+        assertNotNull(resultado);
+        assertTrue(resultado.contains("Usuario"));
+        assertTrue(resultado.contains("Juan Perez"));
+        assertTrue(resultado.contains("jperez@uce.edu.ec"));
     }
 }
