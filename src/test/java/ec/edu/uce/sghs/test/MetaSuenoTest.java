@@ -109,7 +109,6 @@ public class MetaSuenoTest {
 
     @Test
     public void evaluarCumplimientoTest() {
-        // horasSuenoOptimas configurado en setUp es 8.0
         assertTrue(metaSueno.evaluarCumplimiento(8.0));  // Igual
         assertTrue(metaSueno.evaluarCumplimiento(9.0));  // Mayor
         assertFalse(metaSueno.evaluarCumplimiento(7.0)); // Menor
@@ -117,14 +116,12 @@ public class MetaSuenoTest {
 
     @Test
     public void calcularDesviacionMinutosPositiva() {
-        // horaDormirObjetivo es 22:00. Si se duerme a las 22:30 (30 mins tarde)
         LocalTime horaReal = LocalTime.of(22, 30);
         assertEquals(30, metaSueno.calcularDesviacionMinutos(horaReal));
     }
 
     @Test
     public void calcularDesviacionMinutosNegativa() {
-        // horaDormirObjetivo es 22:00. Si se duerme a las 21:45 (15 mins temprano)
         LocalTime horaReal = LocalTime.of(21, 45);
         assertEquals(-15, metaSueno.calcularDesviacionMinutos(horaReal));
     }

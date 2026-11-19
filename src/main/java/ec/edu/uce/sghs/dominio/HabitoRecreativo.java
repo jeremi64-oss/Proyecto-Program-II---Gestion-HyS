@@ -6,10 +6,7 @@ public class HabitoRecreativo extends Habito {
     private boolean requiereCompania;
 
     public HabitoRecreativo() {
-        super();
-        this.tipoActividad = "Lectura";
-        this.duracionObjetivoMinutos = 30;
-        this.requiereCompania = false;
+        this(null, null, null, 0, 0, false, "Lectura", 30, false);
     }
 
     public HabitoRecreativo(Long idHabito, String nombre, PolaridadHabito polaridad, int rachaActual, int diasCumplidos, boolean activo, String tipoActividad, int duracionObjetivoMinutos, boolean requiereCompania) {
@@ -64,6 +61,8 @@ public class HabitoRecreativo extends Habito {
 
     @Override
     public String toString() {
-        return "HabitoRecreativo: " + "idHabito=" + getIdHabito() + ", nombre='" + getNombre() +", tipoActividad='" + tipoActividad + ", duracionObjetivoMinutos=" + duracionObjetivoMinutos + ", requiereCompania=" + requiereCompania ;
+        return "HabitoRecreativo{" + atributosHabito() + ", tipoActividad='" + tipoActividad + "'"
+                + ", duracionObjetivoMinutos=" + duracionObjetivoMinutos
+                + ", requiereCompania=" + requiereCompania + "}";
     }
 }

@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class PlanItem {
 
@@ -12,6 +13,7 @@ public class PlanItem {
     private LocalTime horaInicio;
     private LocalTime horaFin;
     private String estado;
+    private Habito habito;
 
     public PlanItem() {
         this.idPlanItem = 0L;
@@ -23,9 +25,23 @@ public class PlanItem {
 
     public PlanItem(Long idPlanItem, String diaSemana, LocalTime horaInicio,
                     LocalTime horaFin, String estado) {
+        this(idPlanItem, diaSemana, horaInicio, horaFin, estado, null);
+    }
+
+    public PlanItem(Long idPlanItem, String diaSemana, LocalTime horaInicio,
+                    LocalTime horaFin, String estado, Habito habito) {
         setIdPlanItem(idPlanItem);
         reprogramar(diaSemana, horaInicio, horaFin);
         setEstado(estado);
+        this.habito = habito;
+    }
+
+    public Habito getHabito() {
+        return habito;
+    }
+
+    public void setHabito(Habito habito) {
+        this.habito = habito;
     }
 
     public Long getIdPlanItem() {
@@ -150,6 +166,22 @@ public class PlanItem {
                 + ", diaSemana=" + diaSemana
                 + ", horaInicio=" + horaInicio
                 + ", horaFin=" + horaFin
-                + ", estado=" + estado + "}";
+                + ", estado=" + estado + ", habito=" + habito + "}";
+    }
+    @Override
+    public boolean equals(Object objeto) {
+        if (this == objeto) {
+            return true;
+        }
+        if (!(objeto instanceof PlanItem) || getClass() != objeto.getClass()) {
+            return false;
+        }
+        PlanItem otro = (PlanItem) objeto;
+        return idPlanItem != null && idPlanItem > 0 && idPlanItem.equals(otro.idPlanItem);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClass(), idPlanItem);
     }
 }

@@ -7,10 +7,7 @@ public class HabitoHigiene extends Habito {
     private int duracionMinutos;
 
     public HabitoHigiene() {
-        super();
-        this.zonaCuidado = "";
-        this.vecesAlDiaObjetivo = 0;
-        this.duracionMinutos = 0;
+        this(null, null, null, 0, 0, false, "", 0, 0);
     }
 
     public HabitoHigiene(String zonaCuidado,
@@ -96,7 +93,7 @@ public class HabitoHigiene extends Habito {
 
     @Override
     public String toString() {
-        return "HabitoHigiene{" + super.toString()
+        return "HabitoHigiene{" + atributosHabito()
                 + ", zonaCuidado='" + zonaCuidado + '\''
                 + ", vecesAlDiaObjetivo=" + vecesAlDiaObjetivo
                 + ", duracionMinutos=" + duracionMinutos + "}";

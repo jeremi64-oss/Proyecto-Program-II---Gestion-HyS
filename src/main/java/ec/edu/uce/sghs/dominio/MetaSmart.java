@@ -1,6 +1,7 @@
 package ec.edu.uce.sghs.dominio;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class MetaSmart {
 
@@ -11,7 +12,8 @@ public class MetaSmart {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
 
-    public MetaSmart (){
+    public MetaSmart() {
+        this(null, null, 0.0, null, null, null);
     }
 
     public MetaSmart (Long idMeta, String descripcionEspecifica, double valorMedible, String unidadMedida, LocalDate fechaInicio, LocalDate fechaFin){
@@ -74,5 +76,32 @@ public class MetaSmart {
 
     public boolean evaluarCumplimiento(double valorActual) {
         return valorActual >= this.valorMedible;
+    }
+    protected String atributosMeta() {
+        return "idMeta=" + idMeta + ", descripcionEspecifica='" + descripcionEspecifica + "'"
+                + ", valorMedible=" + valorMedible + ", unidadMedida='" + unidadMedida + "'"
+                + ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin;
+    }
+
+    @Override
+    public String toString() {
+        return "MetaSmart{" + atributosMeta() + "}";
+    }
+
+    @Override
+    public boolean equals(Object objeto) {
+        if (this == objeto) {
+            return true;
+        }
+        if (!(objeto instanceof MetaSmart) || getClass() != objeto.getClass()) {
+            return false;
+        }
+        MetaSmart otro = (MetaSmart) objeto;
+        return idMeta != null && idMeta > 0 && idMeta.equals(otro.idMeta);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClass(), idMeta);
     }
 }

@@ -94,8 +94,6 @@ public class HabitoTest {
 
     @Test
     public void calcularGananciaValida() {
-        // diasCumplidos = 20 (del setUp)
-        // Si diasTotales = 40, ganancia debe ser 50.0%
         double ganancia = habito.calcularGanancia(40);
         assertEquals(50.0, ganancia);
     }
@@ -116,5 +114,20 @@ public class HabitoTest {
     @Test
     public void testToString() {
         assertNotNull(habito.toString());
+    }
+    @Test
+    void equalsDistingueElTipoConcretoYUsaElId() {
+        Habito base = new Habito(8L, "Rutina", Habito.PolaridadHabito.POSITIVO, 0, 0, true);
+        Habito otro = new Habito(8L, "Rutina editada", Habito.PolaridadHabito.NEGATIVO, 0, 0, false);
+        ec.edu.uce.sghs.dominio.HabitoEstudio estudio = new ec.edu.uce.sghs.dominio.HabitoEstudio(
+                8L, "Estudiar", Habito.PolaridadHabito.POSITIVO, 1, 2, true, "Java", 40, 5);
+        assertTrue(base.equals(otro));
+        assertTrue(base.hashCode() == otro.hashCode());
+        assertFalse(base.equals(estudio));
+        assertFalse(estudio.equals(base));
+        assertFalse(base.equals(null));
+        assertFalse(new Habito().equals(new Habito()));
+        assertTrue(estudio.toString().contains("diasCumplidos=2"));
+        assertTrue(estudio.toString().contains("asignatura='Java'"));
     }
 }

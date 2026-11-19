@@ -23,12 +23,14 @@ public class CronogramaSemanalTest {
 
         // Suponiendo constructores o setters en PlanItem
         itemPrueba1 = new PlanItem();
+        itemPrueba1.setIdPlanItem(1L);
         itemPrueba1.setDiaSemana("Lunes");
         itemPrueba1.setHoraInicio(LocalTime.of(8, 0));
         itemPrueba1.setHoraFin(LocalTime.of(9, 0));
         itemPrueba1.setEstado("Pendiente");
 
         itemPrueba2 = new PlanItem();
+        itemPrueba2.setIdPlanItem(2L);
         itemPrueba2.setDiaSemana("Lunes");
         itemPrueba2.setHoraInicio(LocalTime.of(10, 0));
         itemPrueba2.setHoraFin(LocalTime.of(11, 0));
@@ -112,18 +114,17 @@ public class CronogramaSemanalTest {
 
     @Test
     public void agregarPlanItemCapacidadMaxima() {
-        // Llenar las 5 capacidades del cronograma configurado en setUp
-        for (int i = 0; i < 5; i++) {
+        String[] dias = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes"};
+
+        for (int i = 0; i < dias.length; i++) {
             PlanItem item = new PlanItem();
-            item.setDiaSemana("Dia" + i);
+            item.setDiaSemana(dias[i]);
             item.setHoraInicio(LocalTime.of(8 + i, 0));
             item.setHoraFin(LocalTime.of(9 + i, 0));
             assertTrue(cronograma.agregarPlanItem(item));
         }
-
         assertEquals(5, cronograma.getContadorItems());
 
-        // Intentar agregar un sexto item superando la capacidad
         PlanItem itemExtra = new PlanItem();
         itemExtra.setDiaSemana("Viernes");
         itemExtra.setHoraInicio(LocalTime.of(15, 0));
@@ -137,7 +138,6 @@ public class CronogramaSemanalTest {
     public void verificarSolapamientoMismoDiaYHorarioCruzado() {
         assertTrue(cronograma.agregarPlanItem(itemPrueba1)); // 08:00 a 09:00 (Lunes)
 
-        // Item que se cruza parcialmente (08:30 a 09:30)
         PlanItem itemSolapado = new PlanItem();
         itemSolapado.setDiaSemana("Lunes");
         itemSolapado.setHoraInicio(LocalTime.of(8, 30));
@@ -151,7 +151,6 @@ public class CronogramaSemanalTest {
     public void verificarSolapamientoSinCruceMismoDia() {
         assertTrue(cronograma.agregarPlanItem(itemPrueba1)); // 08:00 a 09:00 (Lunes)
 
-        // Item despues sin cruce (09:00 a 10:00)
         PlanItem itemSinCruce = new PlanItem();
         itemSinCruce.setDiaSemana("Lunes");
         itemSinCruce.setHoraInicio(LocalTime.of(9, 0));
@@ -175,15 +174,34 @@ public class CronogramaSemanalTest {
         cronograma.agregarPlanItem(itemPrueba1);
         cronograma.agregarPlanItem(itemPrueba2);
 
-        // 1 completado de 2 totales = 50.0%
         assertEquals(50.0, cronograma.calcularBalanceSemanal());
         assertEquals(50.0, cronograma.getCumplimientoSemanal());
     }
 
     @Test
     public void testToString() {
-        // En caso de que se implemente toString en CronogramaSemanal (o por defecto de Object)
-        // Si tu clase implementa toString personalizado, ajusta la aserción acorde.
         assertNotNull(cronograma.toString());
+    }
+    @Test
+    void editarYEliminarMantieneLosHorariosYLaComposicion() {
+        assertTrue(cronograma.agregarPlanItem(itemPrueba1));
+        assertTrue(cronograma.agregarPlanItem(itemPrueba2));
+        PlanItem duplicado = new PlanItem(1L, "Martes", LocalTime.of(8, 0),
+                LocalTime.of(9, 0), "Pendiente");
+        assertFalse(cronograma.agregarPlanItem(duplicado));
+
+        PlanItem copia = cronograma.consultarPlanItem(2L);
+        copia.reprogramar("Lunes", LocalTime.of(8, 30), LocalTime.of(9, 30));
+        assertFalse(cronograma.editarPlanItem(copia));
+        assertEquals(LocalTime.of(10, 0), cronograma.consultarPlanItem(2L).getHoraInicio());
+
+        copia.reprogramar("Lunes", LocalTime.of(9, 0), LocalTime.of(10, 0));
+        assertTrue(cronograma.editarPlanItem(copia));
+        copia.setEstado("Pendiente");
+        assertEquals("COMPLETADO", cronograma.consultarPlanItem(2L).getEstado());
+        assertTrue(cronograma.eliminarPlanItem(1L));
+        assertEquals(2L, cronograma.getItems()[0].getIdPlanItem());
+        assertEquals(100.0, cronograma.getCumplimientoSemanal());
+        assertFalse(cronograma.eliminarPlanItem(1L));
     }
 }

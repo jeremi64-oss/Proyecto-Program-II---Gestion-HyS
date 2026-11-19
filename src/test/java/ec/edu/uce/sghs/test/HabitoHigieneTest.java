@@ -134,7 +134,6 @@ public class HabitoHigieneTest {
 
     @Test
     public void evaluarFrecuenciaTest() {
-        // vecesAlDiaObjetivo configurado en setUp es 3
         assertTrue(habitoHigiene.evaluarFrecuencia(3)); // Igual
         assertTrue(habitoHigiene.evaluarFrecuencia(4)); // Mayor
         assertFalse(habitoHigiene.evaluarFrecuencia(2)); // Menor
@@ -142,10 +141,8 @@ public class HabitoHigieneTest {
 
     @Test
     public void evaluarFrecuenciaExcepciones() {
-        // Veces realizadas negativas
         assertThrows(IllegalArgumentException.class, () -> habitoHigiene.evaluarFrecuencia(-1));
 
-        // Frecuencia objetivo en 0 o no configurada
         HabitoHigiene habitoSinConfigurar = new HabitoHigiene();
         assertThrows(IllegalStateException.class, () -> habitoSinConfigurar.evaluarFrecuencia(2));
     }

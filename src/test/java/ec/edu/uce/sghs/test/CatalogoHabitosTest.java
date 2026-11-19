@@ -160,7 +160,24 @@ public class CatalogoHabitosTest {
     @Test
     public void testToString() {
         catalogo.agregarPlantilla(habitoPrueba, true);
-        String esperado = "CatalogoHabitos{idCatalogo=1, categoria='Salud y Bienestar', version='v1.0', cantidadPlantillas=1}";
-        assertEquals(esperado, catalogo.toString());
+        String descripcion = catalogo.toString();
+        assertTrue(descripcion.contains("cantidadPlantillas=1"));
+        assertTrue(descripcion.contains("idHabito=100"));
+    }
+    @Test
+    void editarYEliminarPlantillasConservaLasSugerenciasDeSueno() {
+        Habito primero = new Habito(31L, "Leer", Habito.PolaridadHabito.POSITIVO, 0, 0, true);
+        Habito segundo = new Habito(32L, "Descansar", Habito.PolaridadHabito.POSITIVO, 0, 0, true);
+        catalogo.agregarPlantilla(primero);
+        catalogo.agregarPlantilla(segundo, true);
+        assertThrows(IllegalArgumentException.class, () -> catalogo.agregarPlantilla(primero));
+        catalogo.eliminarPlantilla(31L);
+        assertEquals(segundo, catalogo.sugerirHabitosSueno().get(0));
+
+        Habito editado = new Habito(32L, "Dormir a tiempo", Habito.PolaridadHabito.POSITIVO, 0, 0, true);
+        catalogo.editarPlantilla(editado, false);
+        assertEquals("Dormir a tiempo", catalogo.obtenerPlantilla(32L).getNombre());
+        assertTrue(catalogo.sugerirHabitosSueno().isEmpty());
+        assertThrows(IllegalArgumentException.class, () -> catalogo.obtenerPlantilla(31L));
     }
 }

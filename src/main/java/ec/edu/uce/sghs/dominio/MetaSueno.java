@@ -9,7 +9,11 @@ public class MetaSueno extends MetaSmart {
     private LocalTime horaDespertarObjetivo;
     private double horasSuenoOptimas;
 
-    public MetaSueno(){
+    public MetaSueno() {
+        super();
+        this.horaDormirObjetivo = null;
+        this.horaDespertarObjetivo = null;
+        this.horasSuenoOptimas = 0.0;
     }
 
     public MetaSueno(Long idMeta, String descripcionEspecifica, double valorMedible, String unidadMedida,
@@ -46,6 +50,7 @@ public class MetaSueno extends MetaSmart {
 
     // --- Métodos
 
+    @Override
     public boolean evaluarCumplimiento(double horasDormidas) {
         return horasDormidas >= this.horasSuenoOptimas;
     }
@@ -56,5 +61,11 @@ public class MetaSueno extends MetaSmart {
         }
         return (int) java.time.Duration.between(this.horaDormirObjetivo, horaReal).toMinutes();
     }
+    @Override
+    public String toString() {
+        return "MetaSueno{" + atributosMeta()
+                + ", horaDormirObjetivo=" + horaDormirObjetivo
+                + ", horaDespertarObjetivo=" + horaDespertarObjetivo
+                + ", horasSuenoOptimas=" + horasSuenoOptimas + "}";
+    }
 }
-

@@ -24,6 +24,7 @@ public class GestorSeguimientoTest {
         adminPrueba.setIdUsuario(1L);
         adminPrueba.setActivo(true);
         adminPrueba.setNombre("Administrador");
+        adminPrueba.setRol(new Rol(1L, Rol.TipoRol.ADMINISTRADOR, "Administrador"));
 
         usuarioPrueba = new Usuario();
         usuarioPrueba.setIdUsuario(2L);
@@ -63,7 +64,7 @@ public class GestorSeguimientoTest {
     public void testGetYSetUsuarios() {
         Usuario[] nuevosUsuarios = new Usuario[2];
         gestor.setUsuarios(nuevosUsuarios);
-        assertEquals(nuevosUsuarios, gestor.getUsuarios());
+        assertTrue(java.util.Arrays.equals(nuevosUsuarios, gestor.getUsuarios()));
     }
 
     @Test
@@ -88,14 +89,14 @@ public class GestorSeguimientoTest {
 
     @Test
     public void agregarUsuarioCapacidadMaxima() {
-        // Gestor configurado con capacidad de 5 usuarios en setUp
+
         for (int i = 0; i < 5; i++) {
             Usuario u = new Usuario();
             u.setIdUsuario((long) (10 + i));
+            u.setCorreo("estudiante" + i + "@uce.edu.ec");
             assertTrue(gestor.agregarUsuario(u));
         }
 
-        // Intentar agregar un sexto usuario superando la capacidad
         Usuario usuarioExtra = new Usuario();
         usuarioExtra.setIdUsuario(99L);
         assertFalse(gestor.agregarUsuario(usuarioExtra));
@@ -163,5 +164,36 @@ public class GestorSeguimientoTest {
     @Test
     public void testToString() {
         assertNotNull(gestor.toString());
+    }
+    @Test
+    void crudUsuariosValidaIdentificadorYCorreo() {
+        Usuario otro = new Usuario(3L, "Otro", "otro@uce.edu.ec", "clave1234", true);
+        assertTrue(gestor.agregarUsuario(usuarioPrueba));
+        assertTrue(gestor.agregarUsuario(otro));
+        assertFalse(gestor.agregarUsuario(new Usuario(2L, "Duplicado", "distinto@uce.edu.ec", "clave1234", true)));
+        assertFalse(gestor.agregarUsuario(new Usuario(4L, "Duplicado", "OTRO@uce.edu.ec", "clave1234", true)));
+
+        Usuario datos = new Usuario(3L, "Nombre editado", "USUARIO@uce.edu.ec", "clave1234", false);
+        assertFalse(gestor.editarUsuario(datos));
+        assertEquals("Otro", gestor.consultarUsuario(3L).getNombre());
+        datos.setCorreo("nuevo@uce.edu.ec");
+        assertTrue(gestor.editarUsuario(datos));
+        assertEquals("Nombre editado", gestor.consultarUsuario(3L).getNombre());
+        assertTrue(gestor.eliminarUsuario(2L));
+        assertFalse(gestor.eliminarUsuario(2L));
+        assertNull(gestor.consultarUsuario(2L));
+        assertEquals(4L, gestor.siguienteIdUsuario());
+        assertEquals(3L, gestor.getUsuarios()[0].getIdUsuario());
+    }
+
+    @Test
+    void cadaUsuarioConservaSuPropioCronograma() {
+        Habito habito = new Habito(15L, "Leer", Habito.PolaridadHabito.POSITIVO, 0, 0, true);
+        CronogramaSemanal cronograma = gestor.generarPlanSeguimiento(usuarioPrueba, new Habito[]{habito});
+        assertTrue(cronograma == usuarioPrueba.getCronograma());
+        assertTrue(cronograma == gestor.generarPlanSeguimiento(usuarioPrueba, new Habito[0]));
+        assertTrue(cronograma.getItems()[0].getHabito() == habito);
+        assertFalse(cronograma.equals(gestor.generarPlanSeguimiento(adminPrueba, null)));
+        assertFalse(gestor.gestionarCuenta(usuarioPrueba, adminPrueba, false));
     }
 }

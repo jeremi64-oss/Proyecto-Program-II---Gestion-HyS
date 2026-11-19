@@ -1,5 +1,8 @@
 package ec.edu.uce.sghs.dominio;
 
+import java.time.LocalDate;
+import java.util.Objects;
+
 public class Usuario {
 
     private Long idUsuario;
@@ -7,13 +10,11 @@ public class Usuario {
     private String correo;
     private String passwordHash;
     private boolean activo;
+    private Rol rol;
+    private CronogramaSemanal cronograma;
 
     public Usuario() {
-        this.idUsuario = 1L;
-        this.nombre = "Usuario Base";
-        this.correo = "usuario@uce.edu.ec";
-        this.passwordHash = "hashSeguro123";
-        this.activo = true;
+        this(1L, "Usuario Base", "usuario@uce.edu.ec", "hashSeguro123", true);
     }
 
     public Usuario(Long idUsuario, String nombre, String correo, String passwordHash, boolean activo) {
@@ -56,7 +57,7 @@ public class Usuario {
         if (correo == null || correo.trim().isEmpty()) {
             return false;
         }
-        this.correo = correo;
+        this.correo = correo.strip();
         return true;
     }
 
@@ -81,7 +82,8 @@ public class Usuario {
     }
 
     public boolean autenticar(String correo, String clave) {
-        return this.activo && this.correo.equals(correo) && this.passwordHash.equals(clave);
+        return this.activo && this.correo != null && correo != null
+                && this.correo.equalsIgnoreCase(correo.strip()) && Objects.equals(this.passwordHash, clave);
     }
 
     public void actualizarPerfil(String nombre, String correo) {
@@ -89,7 +91,6 @@ public class Usuario {
         setCorreo(correo);
     }
 
-    private Rol rol;
     public Rol getRol() {
         return rol;
     }
@@ -101,9 +102,36 @@ public class Usuario {
         return true;
     }
 
+    public CronogramaSemanal getCronograma() {
+        return cronograma;
+    }
+
+    CronogramaSemanal iniciarCronograma(Long idCronograma, LocalDate inicio, int capacidad) {
+        cronograma = new CronogramaSemanal(idCronograma, inicio, 0.0, capacidad);
+        return cronograma;
+    }
+
     @Override
     public String toString() {
-        return "Usuario: " + "idUsuario=" + idUsuario + ", nombre='" + nombre + ", correo='" + correo + ", activo=" + activo;
+        return "Usuario{idUsuario=" + idUsuario + ", nombre='" + nombre + "', correo='" + correo
+                + "', passwordHash='[oculto]', activo=" + activo + ", rol=" + rol
+                + ", idCronograma=" + (cronograma == null ? null : cronograma.getIdCronograma()) + "}";
+    }
+
+    @Override
+    public boolean equals(Object objeto) {
+        if (this == objeto) {
+            return true;
+        }
+        if (!(objeto instanceof Usuario) || getClass() != objeto.getClass()) {
+            return false;
+        }
+        Usuario otro = (Usuario) objeto;
+        return idUsuario != null && idUsuario > 0 && idUsuario.equals(otro.idUsuario);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClass(), idUsuario);
     }
 }
-

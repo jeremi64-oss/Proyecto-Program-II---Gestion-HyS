@@ -100,7 +100,6 @@ public class HabitoEstudioTest {
         assertTrue(habitoEstudio.setMinutosDescanso(20));
         assertEquals(20, habitoEstudio.getMinutosDescanso());
 
-        // Permite 0 minutos de descanso
         assertTrue(habitoEstudio.setMinutosDescanso(0));
         assertEquals(0, habitoEstudio.getMinutosDescanso());
     }
@@ -122,8 +121,6 @@ public class HabitoEstudioTest {
 
     @Test
     public void calcularTiempoTotalValido() {
-        // minutosPorSesion = 60, minutosDescanso = 15 -> Total por sesión = 75 mins
-        // Para 3 sesiones: 3 * 75 = 225 mins
         int tiempoTotal = habitoEstudio.calcularTiempoTotal(3);
         assertEquals(225, tiempoTotal);
     }

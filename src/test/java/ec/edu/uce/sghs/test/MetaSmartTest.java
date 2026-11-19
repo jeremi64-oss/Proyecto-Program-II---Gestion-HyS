@@ -98,7 +98,6 @@ public class MetaSmartTest {
     @Test
     public void validaCriteriosSMARTFallido() {
         MetaSmart metaInvalida = new MetaSmart();
-        // descripcion nula y valor medible en 0
         assertFalse(metaInvalida.validaCriteriosSMART());
 
         metaInvalida.setDescripcionEspecifica("Meta sin valor positivo");

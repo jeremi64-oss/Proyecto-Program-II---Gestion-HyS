@@ -1,5 +1,6 @@
 package ec.edu.uce.sghs.dominio;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Habito {
 
@@ -10,7 +11,8 @@ public class Habito {
     private int diasCumplidos;
     private boolean activo;
 
-    public Habito(){
+    public Habito() {
+        this(null, null, null, 0, 0, false);
     }
 
     public Habito(Long idHabito, String nombre, PolaridadHabito polaridad, int rachaActual, int diasCumplidos, boolean activo){
@@ -88,6 +90,38 @@ public class Habito {
     public void editarHabito(String nombre, PolaridadHabito polaridad) {
         this.nombre = nombre;
         this.polaridad = polaridad;
+    }
+
+    public void editarHabito(Habito datos) {
+        editarHabito(datos.getNombre(), datos.getPolaridad());
+    }
+
+    protected String atributosHabito() {
+        return "idHabito=" + idHabito + ", nombre='" + nombre + "'"
+                + ", polaridad=" + polaridad + ", rachaActual=" + rachaActual
+                + ", diasCumplidos=" + diasCumplidos + ", activo=" + activo;
+    }
+
+    @Override
+    public String toString() {
+        return "Habito{" + atributosHabito() + "}";
+    }
+
+    @Override
+    public boolean equals(Object objeto) {
+        if (this == objeto) {
+            return true;
+        }
+        if (!(objeto instanceof Habito) || getClass() != objeto.getClass()) {
+            return false;
+        }
+        Habito otro = (Habito) objeto;
+        return idHabito != null && idHabito > 0 && idHabito.equals(otro.idHabito);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClass(), idHabito);
     }
 
     public enum PolaridadHabito {

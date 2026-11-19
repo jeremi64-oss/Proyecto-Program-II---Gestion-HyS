@@ -72,7 +72,6 @@ public class MetaHabitoTest {
 
     @Test
     public void evaluarCumplimientoTest() {
-        // frecuenciaSemanal configurada en setUp es 4
         assertTrue(metaHabito.evaluarCumplimiento(4.0)); // Igual
         assertTrue(metaHabito.evaluarCumplimiento(5.0)); // Mayor
         assertFalse(metaHabito.evaluarCumplimiento(3.0)); // Menor
@@ -80,7 +79,6 @@ public class MetaHabitoTest {
 
     @Test
     public void verificarRachaAlcanzadaTest() {
-        // rachaMinimaObjetivo configurado en setUp es 7
         assertTrue(metaHabito.verificarRachaAlcanzada(7)); // Igual
         assertTrue(metaHabito.verificarRachaAlcanzada(10)); // Mayor
         assertFalse(metaHabito.verificarRachaAlcanzada(5)); // Menor

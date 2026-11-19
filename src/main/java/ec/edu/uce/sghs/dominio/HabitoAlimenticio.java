@@ -9,10 +9,7 @@ public class HabitoAlimenticio extends Habito {
     private LocalTime horaComidaObjetivo;
 
     public HabitoAlimenticio() {
-        super();
-        this.tipoComida = "Almuerzo Saludable";
-        this.porcionesObjetivo = 3;
-        this.horaComidaObjetivo = LocalTime.of(12, 30);
+        this(null, null, null, 0, 0, false, "Almuerzo Saludable", 3, LocalTime.of(12, 30));
     }
 
     public HabitoAlimenticio(Long idHabito, String nombre, PolaridadHabito polaridad, int rachaActual, int diasCumplidos, boolean activo,
@@ -73,12 +70,8 @@ public class HabitoAlimenticio extends Habito {
 
     @Override
     public String toString() {
-        return "HabitoAlimenticio{" +
-                "idHabito=" + getIdHabito() +
-                ", nombre='" + getNombre() + '\'' +
-                ", tipoComida='" + tipoComida + '\'' +
-                ", porcionesObjetivo=" + porcionesObjetivo +
-                ", horaComidaObjetivo=" + horaComidaObjetivo +
-                '}';
+        return "HabitoAlimenticio{" + atributosHabito() + ", tipoComida='" + tipoComida + "'"
+                + ", porcionesObjetivo=" + porcionesObjetivo
+                + ", horaComidaObjetivo=" + horaComidaObjetivo + "}";
     }
 }

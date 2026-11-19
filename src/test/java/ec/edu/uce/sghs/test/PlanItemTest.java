@@ -76,7 +76,6 @@ public class PlanItemTest {
         planItem.setDiaSemana("martes");
         assertEquals("MARTES", planItem.getDiaSemana());
 
-        // Acentos normalizados
         planItem.setDiaSemana("Miércoles");
         assertEquals("MIERCOLES", planItem.getDiaSemana());
     }
@@ -99,9 +98,7 @@ public class PlanItemTest {
     @Test
     public void horaInicioInvalida() {
         assertThrows(IllegalArgumentException.class, () -> planItem.setHoraInicio(null));
-        // Con segundos o nanosegundos distintos de 0
         assertThrows(IllegalArgumentException.class, () -> planItem.setHoraInicio(LocalTime.of(8, 0, 30)));
-        // Fin es 09:30, inicio no puede ser posterior o igual a fin
         assertThrows(IllegalArgumentException.class, () -> planItem.setHoraInicio(LocalTime.of(10, 0)));
     }
 
@@ -115,7 +112,6 @@ public class PlanItemTest {
     public void horaFinInvalida() {
         assertThrows(IllegalArgumentException.class, () -> planItem.setHoraFin(null));
         assertThrows(IllegalArgumentException.class, () -> planItem.setHoraFin(LocalTime.of(9, 0, 15)));
-        // Inicio es 08:00, fin no puede ser anterior o igual a inicio
         assertThrows(IllegalArgumentException.class, () -> planItem.setHoraFin(LocalTime.of(7, 0)));
     }
 
@@ -159,7 +155,6 @@ public class PlanItemTest {
 
     @Test
     public void obtenerDuracionMinutosTest() {
-        // De 08:00 a 09:30 son 90 minutos
         assertEquals(90, planItem.obtenerDuracionMinutos());
     }
 

@@ -7,10 +7,7 @@ public class HabitoEstudio extends Habito {
     private int minutosDescanso;
 
     public HabitoEstudio() {
-        super();
-        this.asignatura = "Matemáticas";
-        this.minutosPorSesion = 45;
-        this.minutosDescanso = 10;
+        this(null, null, null, 0, 0, false, "Matemáticas", 45, 10);
     }
 
     public HabitoEstudio(Long idHabito, String nombre, PolaridadHabito polaridad, int rachaActual, int diasCumplidos, boolean activo, String asignatura, int minutosPorSesion, int minutosDescanso) {
@@ -71,7 +68,8 @@ public class HabitoEstudio extends Habito {
 
     @Override
     public String toString() {
-        return "HabitoEstudio: " + "idHabito=" + getIdHabito() + ", nombre='" + getNombre() + ", asignatura='" + asignatura + ", minutosPorSesion=" + minutosPorSesion + ", minutosDescanso=" + minutosDescanso ;
+        return "HabitoEstudio{" + atributosHabito() + ", asignatura='" + asignatura + "'"
+                + ", minutosPorSesion=" + minutosPorSesion + ", minutosDescanso=" + minutosDescanso + "}";
     }
 }
 

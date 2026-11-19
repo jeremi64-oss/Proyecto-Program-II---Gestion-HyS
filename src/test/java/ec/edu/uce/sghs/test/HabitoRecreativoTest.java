@@ -81,7 +81,6 @@ public class HabitoRecreativoTest {
         assertEquals(tipoAntes, habitoRecreativo.getTipoActividad());
     }
 
-    // Auxiliar local para probar espacios en blanco
     private boolean habitoRecentivoSetVacioSiAplica(String valor) {
         return habitoRecreativo.setTipoActividad(valor);
     }
