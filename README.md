@@ -1,6 +1,6 @@
 # Sistema de Gestión de Hábitos y Sueño
 
-Proyecto de Programación II de la Universidad Central del Ecuador, desarrollado en Java con estructura Maven para IntelliJ IDEA.
+Proyecto de Programación II desarrollado en Java para IntelliJ IDEA.
 
 ## Contenido
 
@@ -22,8 +22,7 @@ Los paquetes del proyecto están bajo `ec.edu.uce.sghs`. El menú incluye usuari
 
 ## Archivos del proyecto
 
-- `src/main/java/ec/edu/uce/sghs`: código fuente y clase de inicio.
-- `src/test/java/ec/edu/uce/sghs/test`: pruebas JUnit.
-- `pom.xml`: configuración Maven y dependencia de pruebas.
+- `src/main/java/ec/edu/uce/sghs`
+- `src/test/java/ec/edu/uce/sghs/test`
+- `pom.xml`
 
-Los archivos compilados (`target/`) y la configuración local del editor (`.idea/`) se excluyen del repositorio.
